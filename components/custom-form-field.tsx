@@ -13,7 +13,16 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { FormFieldType } from "@/lib/types";
+
+export enum FormFieldType {
+  CHECKBOX = "checkbox",
+  DATE_PICKER = "datePicker",
+  INPUT = "input",
+  PHONE_INPUT = "phoneinput",
+  SELECT = "select",
+  SKELETON = "skeleton",
+  TEXTAREA = "textarea",
+}
 
 interface Props {
   control: Control<any>;

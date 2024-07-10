@@ -6,10 +6,10 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import { CustomFormField } from "@/components/custom-form-field";
+import { CustomFormField, FormFieldType } from "@/components/custom-form-field";
 import { SubmitButton } from "@/components/submit-button";
 import { Form } from "@/components/ui/form";
-import { FormFieldType } from "@/lib/types";
+import { createUser } from "@/lib/actions/patient";
 import { UserFormValidation } from "@/lib/validations";
 
 export const PatientForm = () => {
@@ -30,11 +30,11 @@ export const PatientForm = () => {
     try {
       setIsLoading(true);
 
-      // const user = await createUser(values);
+      const user = await createUser(values);
 
-      // if (user) {
-      //   router.push(`/patients/${user.$id}/register`);
-      // }
+      if (user) {
+        router.push(`/patients/${user.$id}/register`);
+      }
     } catch (error) {
       console.error(error);
     } finally {
