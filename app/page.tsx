@@ -13,7 +13,7 @@ const RootPage = () => {
               src="/assets/icons/logo-icon.svg"
               height={1000}
               width={1000}
-              alt="patient"
+              alt="icon"
               className="w-fit mr-2"
             />
             <h2 className="text-xl font-semibold">Patient Management System</h2>
@@ -33,7 +33,7 @@ const RootPage = () => {
         src="/assets/images/onboarding-img.png"
         height={1000}
         width={1000}
-        alt="patient"
+        alt="onboarding"
         className="side-img max-w-[50%]"
       />
     </div>

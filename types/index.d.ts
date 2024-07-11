@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 
-declare type Gender = "Male" | "Female" | "Other";
+declare type Gender = "male" | "female" | "other";
 
 declare type Status = "pending" | "scheduled" | "cancelled";
 

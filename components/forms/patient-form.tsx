@@ -27,9 +27,9 @@ export const PatientForm = () => {
   });
 
   const onSubmit = async (values: z.infer<typeof UserFormValidation>) => {
-    try {
-      setIsLoading(true);
+    setIsLoading(true);
 
+    try {
       const user = await createUser(values);
 
       if (user) {
@@ -37,9 +37,9 @@ export const PatientForm = () => {
       }
     } catch (error) {
       console.error(error);
-    } finally {
-      setIsLoading(false);
     }
+
+    setIsLoading(false);
   };
 
   return (

@@ -6,13 +6,19 @@ interface Props {
   children: React.ReactNode;
   isLoading: boolean;
   className?: string;
+  disabled?: boolean;
 }
 
-export const SubmitButton = ({ children, isLoading, className }: Props) => {
+export const SubmitButton = ({
+  children,
+  isLoading,
+  className,
+  disabled,
+}: Props) => {
   return (
     <Button
       type="submit"
-      disabled={isLoading}
+      disabled={isLoading || disabled}
       className={className ?? "shad-primary-btn w-full"}
     >
       {isLoading ? (
