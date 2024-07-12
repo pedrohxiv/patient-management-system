@@ -60,6 +60,7 @@ export const PatientForm = () => {
           placeholder="John Doe"
           iconSrc="/assets/icons/user.svg"
           iconAlt="user"
+          disabled={isLoading}
         />
         <CustomFormField
           control={form.control}
@@ -69,12 +70,14 @@ export const PatientForm = () => {
           placeholder="johndoe@mail.com"
           iconSrc="/assets/icons/email.svg"
           iconAlt="email"
+          disabled={isLoading}
         />
         <CustomFormField
           control={form.control}
           fieldType={FormFieldType.PHONE_INPUT}
           name="phone"
           label="Phone number"
+          disabled={isLoading}
         />
         <SubmitButton isLoading={isLoading}>Get Started</SubmitButton>
       </form>

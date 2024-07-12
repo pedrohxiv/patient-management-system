@@ -1,15 +1,15 @@
 import Image from "next/image";
 
-import { RegisterForm } from "@/components/forms/register-form";
-import { getUser } from "@/lib/actions/patient";
+import { AppointmentForm } from "@/components/forms/appointment-form";
+import { getPatient } from "@/lib/actions/patient";
 
-const RegisterPage = async ({ params }: SearchParamProps) => {
-  const user = await getUser(params.userId);
+const NewAppointmentPage = async ({ params }: SearchParamProps) => {
+  const patient = await getPatient(params.userId);
 
   return (
     <div className="flex h-screen max-h-sreen">
       <section className="remove-scrollbar container">
-        <div className="sub-container max-w-[860px] flex-1 flex-col py-10">
+        <div className="sub-container max-w-[860px] flex-1 justify-between">
           <div className="flex flex-row items-center mb-6 2xl:mb-12">
             <Image
               src="/assets/icons/logo-icon.svg"
@@ -20,21 +20,25 @@ const RegisterPage = async ({ params }: SearchParamProps) => {
             />
             <h2 className="text-xl font-semibold">Patient Management System</h2>
           </div>
-          <RegisterForm user={user} />
+          <AppointmentForm
+            patientId={patient.$id}
+            type="create"
+            userId={params.userId}
+          />
           <div className="py-6 2xl:py-12 flex justify-center">
             <p className="copyright">&copy; 2024 Patient Management System.</p>
           </div>
         </div>
       </section>
       <Image
-        src="/assets/images/register-img.png"
+        src="/assets/images/appointment-img.png"
         height={1000}
         width={1000}
-        alt="register"
-        className="side-img max-w-[390px]"
+        alt="appointment"
+        className="side-img max-w-[390px] bg-bottom"
       />
     </div>
   );
 };
 
-export default RegisterPage;
+export default NewAppointmentPage;

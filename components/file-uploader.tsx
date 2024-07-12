@@ -4,14 +4,15 @@ import Image from "next/image";
 import { useCallback } from "react";
 import { useDropzone } from "react-dropzone";
 
-import { convertFileToUrl } from "@/lib/utils";
+import { cn, convertFileToUrl } from "@/lib/utils";
 
 interface Props {
   files: File[] | undefined;
   onChange: (files: File[]) => void;
+  disabled?: boolean;
 }
 
-export const FileUploader = ({ files, onChange }: Props) => {
+export const FileUploader = ({ files, onChange, disabled }: Props) => {
   const onDrop = useCallback((acceptedFiles: File[]) => {
     onChange(acceptedFiles);
   }, []);
@@ -19,8 +20,14 @@ export const FileUploader = ({ files, onChange }: Props) => {
   const { getInputProps, getRootProps } = useDropzone({ onDrop });
 
   return (
-    <div {...getRootProps()} className="file-upload">
-      <input {...getInputProps()} />
+    <div
+      {...getRootProps()}
+      className={cn(
+        "file-upload cursor-pointer",
+        disabled && "cursor-not-allowed opacity-50"
+      )}
+    >
+      {!disabled && <input {...getInputProps()} />}
       {files && files.length > 0 ? (
         <Image
           src={convertFileToUrl(files[0])}

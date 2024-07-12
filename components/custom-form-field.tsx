@@ -23,6 +23,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { cn } from "@/lib/utils";
 
 export enum FormFieldType {
   CHECKBOX = "checkbox",
@@ -81,6 +82,7 @@ export const CustomFormField = ({
                       id={name}
                       checked={field.value}
                       onCheckedChange={field.onChange}
+                      disabled={disabled}
                     />
                     <label htmlFor={name} className="checkbox-label">
                       {label}
@@ -89,7 +91,12 @@ export const CustomFormField = ({
                 );
               case FormFieldType.DATE_PICKER:
                 return (
-                  <div className="flex rounded-md border border-dark-500 bg-dark-400">
+                  <div
+                    className={cn(
+                      "flex rounded-md border border-dark-500 bg-dark-400",
+                      disabled && "cursor-not-allowed opacity-50"
+                    )}
+                  >
                     <Image
                       src="/assets/icons/calendar.svg"
                       height={24}
@@ -105,13 +112,19 @@ export const CustomFormField = ({
                         showTimeSelect={showTimeSelect ?? false}
                         timeInputLabel="Time:"
                         wrapperClassName="date-picker"
+                        disabled={disabled}
                       />
                     </FormControl>
                   </div>
                 );
               case FormFieldType.INPUT:
                 return (
-                  <div className="flex rounded-md border border-dark-500 bg-dark-400">
+                  <div
+                    className={cn(
+                      "flex rounded-md border border-dark-500 bg-dark-400",
+                      disabled && "cursor-not-allowed opacity-50"
+                    )}
+                  >
                     {iconSrc && (
                       <Image
                         src={iconSrc}
@@ -126,6 +139,7 @@ export const CustomFormField = ({
                         placeholder={placeholder}
                         {...field}
                         className="shad-input border-0"
+                        disabled={disabled}
                       />
                     </FormControl>
                   </div>
@@ -139,6 +153,7 @@ export const CustomFormField = ({
                       value={field.value}
                       onChange={field.onChange}
                       className="input-phone"
+                      disabled={disabled}
                     />
                   </FormControl>
                 );
@@ -148,6 +163,7 @@ export const CustomFormField = ({
                     <Select
                       onValueChange={field.onChange}
                       defaultValue={field.value}
+                      disabled={disabled}
                     >
                       <SelectTrigger className="shad-select-trigger">
                         <SelectValue placeholder={placeholder} />

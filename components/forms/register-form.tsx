@@ -21,6 +21,7 @@ import {
   identificationTypes,
   patientFormDefaultValues,
 } from "@/lib/constants";
+import { cn } from "@/lib/utils";
 import { PatientFormValidation } from "@/lib/validations";
 
 interface Props {
@@ -109,6 +110,7 @@ export const RegisterForm = ({ user }: Props) => {
           placeholder="John Doe"
           iconSrc="/assets/icons/user.svg"
           iconAlt="user"
+          disabled={isLoading}
         />
         <div className="flex flex-col gap-6 xl:flex-row">
           <CustomFormField
@@ -119,12 +121,14 @@ export const RegisterForm = ({ user }: Props) => {
             placeholder="johndoe@mail.com"
             iconSrc="/assets/icons/email.svg"
             iconAlt="email"
+            disabled={isLoading}
           />
           <CustomFormField
             control={form.control}
             fieldType={FormFieldType.PHONE_INPUT}
             name="phone"
             label="Phone number"
+            disabled={isLoading}
           />
         </div>
         <div className="flex flex-col gap-6 xl:flex-row">
@@ -133,6 +137,7 @@ export const RegisterForm = ({ user }: Props) => {
             fieldType={FormFieldType.DATE_PICKER}
             name="birthDate"
             label="Date of Birth"
+            disabled={isLoading}
           />
           <CustomFormField
             control={form.control}
@@ -145,11 +150,24 @@ export const RegisterForm = ({ user }: Props) => {
                   className="flex h-11 gap-6 xl:justify-between"
                   onValueChange={field.onChange}
                   defaultValue={field.value}
+                  disabled={isLoading}
                 >
                   {genderOptions.map((option) => (
-                    <div key={option} className="radio-group">
+                    <div
+                      key={option}
+                      className={cn(
+                        "radio-group",
+                        isLoading && "cursor-not-allowed opacity-50"
+                      )}
+                    >
                       <RadioGroupItem value={option} id={option} />
-                      <Label htmlFor={option} className="cursor-pointer">
+                      <Label
+                        htmlFor={option}
+                        className={cn(
+                          "cursor-pointer",
+                          isLoading && "cursor-not-allowed opacity-50"
+                        )}
+                      >
                         {option}
                       </Label>
                     </div>
@@ -166,6 +184,7 @@ export const RegisterForm = ({ user }: Props) => {
             name="address"
             label="Address"
             placeholder="14th Street, New York"
+            disabled={isLoading}
           />
           <CustomFormField
             control={form.control}
@@ -173,6 +192,7 @@ export const RegisterForm = ({ user }: Props) => {
             name="occupation"
             label="Occupation"
             placeholder="Software Engineer"
+            disabled={isLoading}
           />
         </div>
         <div className="flex flex-col gap-6 xl:flex-row">
@@ -182,12 +202,14 @@ export const RegisterForm = ({ user }: Props) => {
             name="emergencyContactName"
             label="Emergency contact name"
             placeholder="Guardian's name"
+            disabled={isLoading}
           />
           <CustomFormField
             control={form.control}
             fieldType={FormFieldType.PHONE_INPUT}
             name="emergencyContactNumber"
             label="Emergency contact number"
+            disabled={isLoading}
           />
         </div>
         <section className="space-y-6">
@@ -201,6 +223,7 @@ export const RegisterForm = ({ user }: Props) => {
           name="primaryPhysician"
           label="Primary physician"
           placeholder="Select a physician"
+          disabled={isLoading}
         >
           {doctors.map((doctor) => (
             <SelectItem
@@ -228,6 +251,7 @@ export const RegisterForm = ({ user }: Props) => {
             name="insuranceProvider"
             label="Insurance provider"
             placeholder="BlueCross BlueShield"
+            disabled={isLoading}
           />
           <CustomFormField
             control={form.control}
@@ -235,6 +259,7 @@ export const RegisterForm = ({ user }: Props) => {
             name="insurancePolicyNumber"
             label="Insurance policy number"
             placeholder="ABC123456789"
+            disabled={isLoading}
           />
         </div>
         <div className="flex flex-col gap-6 xl:flex-row">
@@ -244,6 +269,7 @@ export const RegisterForm = ({ user }: Props) => {
             name="allergies"
             label="Allergies (if any)"
             placeholder="Peanuts, Penicillin, Pollen"
+            disabled={isLoading}
           />
           <CustomFormField
             control={form.control}
@@ -251,6 +277,7 @@ export const RegisterForm = ({ user }: Props) => {
             name="currentMedication"
             label="Current medication (if any)"
             placeholder="Ibuprofen 200mg, Paracetamol 500mg"
+            disabled={isLoading}
           />
         </div>
         <div className="flex flex-col gap-6 xl:flex-row">
@@ -260,6 +287,7 @@ export const RegisterForm = ({ user }: Props) => {
             name="familyMedicalHistory"
             label="Family medical history"
             placeholder="Father had hearth disease"
+            disabled={isLoading}
           />
           <CustomFormField
             control={form.control}
@@ -267,6 +295,7 @@ export const RegisterForm = ({ user }: Props) => {
             name="pastMedicalHistory"
             label="Past medical history"
             placeholder="Appendectomy, Tonsillectomy"
+            disabled={isLoading}
           />
         </div>
         <section className="space-y-6">
@@ -280,6 +309,7 @@ export const RegisterForm = ({ user }: Props) => {
           name="identificationType"
           label="Identification type"
           placeholder="Select an identification type"
+          disabled={isLoading}
         >
           {identificationTypes.map((type) => (
             <SelectItem key={type} value={type} className="cursor-pointer">
@@ -293,6 +323,7 @@ export const RegisterForm = ({ user }: Props) => {
           name="identificationNumber"
           label="Identification number"
           placeholder="123456789"
+          disabled={isLoading}
         />
         <CustomFormField
           control={form.control}
@@ -301,7 +332,11 @@ export const RegisterForm = ({ user }: Props) => {
           label="Scanned copy of identification document"
           renderSkeleton={(field) => (
             <FormControl>
-              <FileUploader files={field.value} onChange={field.onChange} />
+              <FileUploader
+                files={field.value}
+                onChange={field.onChange}
+                disabled={isLoading}
+              />
             </FormControl>
           )}
         />
@@ -315,18 +350,21 @@ export const RegisterForm = ({ user }: Props) => {
           fieldType={FormFieldType.CHECKBOX}
           name="treatmentConsent"
           label="I consent to receive treatment for my health condition"
+          disabled={isLoading}
         />
         <CustomFormField
           control={form.control}
           fieldType={FormFieldType.CHECKBOX}
           name="disclosureConsent"
           label="I consent to the use and disclosure of my health information for treatment purpose"
+          disabled={isLoading}
         />
         <CustomFormField
           control={form.control}
           fieldType={FormFieldType.CHECKBOX}
           name="privacyConsent"
           label="I acknowledge that I have reviewed and agree to the privacy policy"
+          disabled={isLoading}
         />
         <SubmitButton
           isLoading={isLoading}
