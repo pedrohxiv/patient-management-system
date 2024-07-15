@@ -2,10 +2,14 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { PatientForm } from "@/components/forms/patient-form";
+import { PasskeyModal } from "@/components/passkey-modal";
 
-const RootPage = () => {
+const RootPage = ({ searchParams }: SearchParamProps) => {
+  const isAdmin = searchParams.admin === "true";
+
   return (
     <div className="flex h-screen max-h-sreen">
+      {isAdmin && <PasskeyModal />}
       <section className="remove-scrollbar container my-auto">
         <div className="sub-container max-w-[496px]">
           <div className="flex flex-row items-center mb-6 2xl:mb-12">
