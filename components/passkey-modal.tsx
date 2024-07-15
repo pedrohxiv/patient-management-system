@@ -69,7 +69,7 @@ export const PasskeyModal = () => {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent className="shad-dialog">
+      <DialogContent className="shad-passkey-dialog">
         <DialogHeader>
           <DialogTitle className="flex items-start justify-between">
             Admin Access Verification

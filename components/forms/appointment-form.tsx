@@ -11,7 +11,10 @@ import { CustomFormField, FormFieldType } from "@/components/custom-form-field";
 import { SubmitButton } from "@/components/submit-button";
 import { Form } from "@/components/ui/form";
 import { SelectItem } from "@/components/ui/select";
-import { createAppointment } from "@/lib/actions/appointment";
+import {
+  createAppointment,
+  updateAppointment,
+} from "@/lib/actions/appointment";
 import { doctors } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 import { getAppointmentSchema } from "@/lib/validations";
@@ -71,7 +74,7 @@ export const AppointmentForm = ({
 
     try {
       if (type === "create" && patientId) {
-        const appointment = await createAppointment({
+        const newAppointment = await createAppointment({
           userId,
           patient: patientId,
           primaryPhysician: values.primaryPhysician,
@@ -81,12 +84,30 @@ export const AppointmentForm = ({
           note: values.note,
         });
 
-        if (appointment) {
+        if (newAppointment) {
           form.reset();
 
           router.push(
-            `/patients/${userId}/new-appointment/success?appointmentId=${appointment.$id}`
+            `/patients/${userId}/new-appointment/success?appointmentId=${newAppointment.$id}`
           );
+        }
+      } else {
+        const updatedAppointment = await updateAppointment({
+          userId,
+          appointmentId: appointment?.$id!,
+          appointment: {
+            primaryPhysician: values.primaryPhysician,
+            schedule: new Date(values.schedule),
+            status: status as Status,
+            cancellationReason: values.cancellationReason,
+          },
+          type,
+        });
+
+        if (updatedAppointment) {
+          setOpen && setOpen(false);
+
+          form.reset();
         }
       }
     } catch (error) {
@@ -102,12 +123,14 @@ export const AppointmentForm = ({
         onSubmit={form.handleSubmit(onSubmit)}
         className="space-y-3 2xl:space-y-6 flex-1"
       >
-        <section className="mb-6 2xl:mb-12 space-y-4">
-          <h1 className="header">Hi there 👋</h1>
-          <p className="text-dark-700">
-            Request a new appointment in 10 seconds.
-          </p>
-        </section>
+        {type === "create" && (
+          <section className="mb-6 2xl:mb-12 space-y-4">
+            <h1 className="header">Hi there 👋</h1>
+            <p className="text-dark-700">
+              Request a new appointment in 10 seconds.
+            </p>
+          </section>
+        )}
         {type !== "cancel" && (
           <>
             <CustomFormField
@@ -146,7 +169,7 @@ export const AppointmentForm = ({
               dateFormat="MM/dd/yyyy h:mm aa"
               disabled={isLoading}
             />
-            <div className="flex flex-col gap-6 xl:flex-row">
+            <div className="flex flex-col gap-3 xl:gap-6 xl:flex-row">
               <CustomFormField
                 control={form.control}
                 fieldType={FormFieldType.TEXTAREA}
