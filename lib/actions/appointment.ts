@@ -2,13 +2,15 @@
 
 import { revalidatePath } from "next/cache";
 import { ID, Query } from "node-appwrite";
+import { Resend } from "resend";
 
 import {
   APPOINTMENT_COLLECTION_ID,
   DATABASE_ID,
   databases,
+  messaging,
 } from "@/lib/appwrite.config";
-import { parseStringify } from "@/lib/utils";
+import { formatDateTime, parseStringify } from "@/lib/utils";
 import { Appointment } from "@/types/appwrite.types";
 
 export const createAppointment = async (
@@ -81,6 +83,29 @@ export const getAppointments = async () => {
   }
 };
 
+export const sendSMSNotification = async (userId: string, content: string) => {
+  try {
+    await messaging.createSms(ID.unique(), content, [], [userId]);
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const sendEmailNotification = async (email: string, content: string) => {
+  try {
+    const resend = new Resend(process.env.RESEND_API_KEY);
+
+    await resend.emails.send({
+      from: "onboarding@resend.dev",
+      to: email,
+      subject: "Patient Management System",
+      html: `<p>${content}</p>`,
+    });
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 export const updateAppointment = async ({
   appointmentId,
   userId,
@@ -95,9 +120,18 @@ export const updateAppointment = async ({
       appointment
     );
 
-    if (!updateAppointment) {
-      throw new Error("Appointment not found");
-    }
+    const message = `Greetings from Patient Management System. ${
+      type === "schedule"
+        ? `Your appointment is confirmed for ${
+            formatDateTime(appointment.schedule!).dateTime
+          } with Dr. ${appointment.primaryPhysician}`
+        : `We regret to inform that your appointment for ${
+            formatDateTime(appointment.schedule!).dateTime
+          } is cancelled. Reason:  ${appointment.cancellationReason}`
+    }.`;
+
+    await sendSMSNotification(userId, message);
+    await sendEmailNotification(updatedAppointment.patient.email, message);
 
     revalidatePath("/admin");
 
